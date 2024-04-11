@@ -18,7 +18,7 @@
 //   final TextEditingController nameController = TextEditingController();
 //   final AuthService authService = AuthService();
 
-//   void signupUser() {
+//   void () {
 //     authService.signUpUser(
 //       context: context,
 //       email: emailController.text,
@@ -95,13 +95,35 @@
 //     );
 //   }
 // }
-import 'package:flutter/material.dart';
-import 'package:clearcare/home.dart'; // Import your home page file
 
-class SignUpPage extends StatelessWidget {
+import 'package:flutter/material.dart';
+//import 'package:clearcare/custom_textfield.dart';
+import 'package:clearcare/sign_in.dart';
+//import 'package:flutter/material.dart';
+//import 'package:clearcare/home.dart'; // Import your home page file
+import 'package:clearcare/services/auth_services.dart';
+
+class SignupPage extends StatefulWidget {
+  const SignupPage({Key? key}) : super(key: key);
+
+  @override
+  State<SignupPage> createState() => SignUpPage();
+}
+
+class SignUpPage extends State<SignupPage> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final AuthService authService = AuthService();
+
+  void signupUser() {
+    authService.signUpUser(
+      context: context,
+      email: emailController.text,
+      password: passwordController.text,
+      name: nameController.text,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -162,6 +184,7 @@ class SignUpPage extends StatelessWidget {
                 ),
                 SizedBox(height: 20),
                 TextField(
+                  obscureText: true,
                   controller: passwordController,
                   style: TextStyle(color: const Color.fromARGB(179, 10, 0, 0)),
                   decoration: InputDecoration(
@@ -179,20 +202,36 @@ class SignUpPage extends StatelessWidget {
                     elevation: 5,
                   ),
                   onPressed: () {
-                    String name = nameController.text;
-                    String email = emailController.text;
-                    String password = passwordController.text;
-
-                    if (name.isNotEmpty &&
-                        email.isNotEmpty &&
-                        password.isNotEmpty) {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => HomePage()),
-                      );
-                    }
+                    signupUser();
                   },
                   child: Text('Sign Up'),
+                ),
+                SizedBox(height: 20),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SignInPage()),
+                    );
+                  },
+                  child: Text.rich(
+                    TextSpan(
+                      text: 'Already a user? ',
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: 'Sign in here',
+                          style: TextStyle(
+                            color: Colors.blue,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
